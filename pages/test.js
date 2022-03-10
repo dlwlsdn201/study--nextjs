@@ -3,11 +3,8 @@ import React from 'react';
 
 const Test = () => {
   return (
-    // eslint-disable-next-line @next/next/link-passhref
     <Link href="/">
-      <div>
-        <a>Back To the Home</a>
-      </div>
+      <a>Back To the Home</a>
     </Link>
   );
 };
