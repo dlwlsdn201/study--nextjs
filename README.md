@@ -59,8 +59,7 @@
   $tsc --init
   ```
 - tsconfig.json 세팅
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1feb32c9-ff53-4258-b1a0-c6f75b776a6e/Untitled.png)
-
+  ![image](https://user-images.githubusercontent.com/53039583/157672780-ef91a0c3-e6a8-4476-9d15-a1120b15fe0b.png)
 ## Styled-components 라이브러리 설치 및 적용
 
 ### 설치
@@ -91,19 +90,19 @@ $yarn add babel-plugin-styled-components
 ### 적용
 
 - `.babelrc` 파일을 생성해서 아래와 같이 세팅한다.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dddd8e95-1ce4-4318-8602-168738b7be04/Untitled.png)
-
+  ![image](https://user-images.githubusercontent.com/53039583/157672897-e2f71ab4-d136-4ba1-b795-f643bf036cc9.png)
+  
 ## globalStyle 과 theme
 
 - 기본적으로 적용되는 css들을 reset하고 자주 쓰는 css 조합을 theme로 등록해두면 편하게 css 속성들을 적용해 나갈 수 있다.
 - globalStyle 파일에서는 reset.css 와 같은 역할을 할 수 있도록 세팅한다.
 - theme에서는 `display: flex; align-item: center;` 와 같이 자주 사용하는 css 세트를 만들어서 등록해둔다.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/39baad33-c5c3-4f5f-af39-2b65028072e0/Untitled.png)
+  ![image](https://user-images.githubusercontent.com/53039583/157672945-c93e5935-a5f6-4da2-a541-88378af49ab5.png)
 - Home.module.css는 무시하고 globalstyle과 theme만 보면 된다.
 
 ## \_app.js 세팅
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b646dc06-934f-4696-9f96-cb2ccdc16c1b/Untitled.png)
+![image](https://user-images.githubusercontent.com/53039583/157672975-ff55997f-9f4c-4b0b-907b-81277112b05b.png)
 
 - 위와 같이 설정해둔 GlobalStyle과 theme를 전역으로 사용할 수 있도록 pages/\_app.js 에 세팅해준다.
 - 절대경로로 파일을 import 하는 방법은 tsconfig.json 파일에서 “baseUrl” 부분을 설정해주면 된다.
@@ -113,7 +112,7 @@ $yarn add babel-plugin-styled-components
 
 - SSR을 할 때도, styled-components를 적용할 수 있도록 설정해준다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a0a62b44-4a84-42fa-abf9-20a6ad35d59d/Untitled.png)
+![image](https://user-images.githubusercontent.com/53039583/157673010-f3c2f041-e561-4580-9cee-8cb8ecd167ed.png)
 
 - SSR에서 styled-components는 사용자가 접속하였을 때, 변환되기 때문에 깜빡이는 현상이 생기게 된다. 그래서 미리 css를 적용시켜두어야 깜빡이는 현상 없이 페이지를 실행할 수 있는데 이것을 \_document.js 에 세팅하는 것이다.
 - [https://velog.io/@geonoo99/NextJS-세팅하기](https://velog.io/@geonoo99/NextJS-%EC%84%B8%ED%8C%85%ED%95%98%EA%B8%B0)
@@ -193,3 +192,7 @@ export default function Home() {
   - 증상 : 테스트 페이지 컴포넌트를 생성하여 라우팅 하는 과정에서 발생하였다. 에러 구문을 간단히 해석해보자면 **컴포넌트의 export 형식과 import 형식 정의가 잘못되었다는 것이다.**
   - 원인 : \_app.js 에서 GlobalStyle 컴포넌트를 불러오는 import 구문이 원인이었다. GlobalStyle 이 `default export` 가 아닌 `export` 로 되어 있었는데, \_app.js 에서는 `import GlobalStyle from ‘./...’` 로 임포트하려고 하여 충돌이 발생한 것이다.
   - 솔루션 : GlobalStyle.ts 에서 `export` → `default export` 로 수정하여 해결하였다.
+
+## 참고
+  - _app.js 와 _document.js
+    - https://merrily-code.tistory.com/154
