@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
   div, span, p {
     padding: 0;
   }
 `;
+
+export default GlobalStyle;

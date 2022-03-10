@@ -1,34 +1,195 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## ESLint, Prettier config 파일 만들기
 
-## Getting Started
+- ESLint
+  ```json
+  // .eslintrc.json
+  {
+    "extends": ["react-app", "prettier/prettier"],
+    "plugins": ["react-hooks", "simple-import-sort", "prettier"],
+    "rules": {
+      "prettier/prettier": "error",
+      "react-hooks/rules-of-hooks": "error",
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+      "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+      "comma-dangle": ["error", "always-multiline"],
+      "object-curly-spacing": ["error", "always"],
+      "space-in-parens": ["error", "never"],
+      "computed-property-spacing": ["error", "never"],
+      "comma-spacing": ["error", { "before": false, "after": true }],
+      "eol-last": ["error", "always"],
+      "quotes": ["error", "single"],
+      "no-tabs": "error",
+      "semi": ["error", "never"],
+      "import/no-anonymous-default-export": 0,
+      "object-shorthand": "error",
+      "padding-line-between-statements": [
+        "error",
+        { "blankLine": "always", "prev": "*", "next": "return" }
+      ],
+      "@typescript-eslint/no-redeclare": 0
+    }
+  }
+  ```
+- prettier
+  ```json
+  // .prettierrc.json
+  {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "bracketSpacing": true,
+    "endOfLine": "auto",
+    "useTabs": false
+  }
+  ```
 
-First, run the development server:
+## Typescript 적용
+
+- 타입스크립트에 필요한 라이브러리 설치
+  ```bash
+  $npm install --save-dev typescript @types/react @types/node
+  또는
+  $yarn add --save-dev typescript @types/react @types/node
+  ```
+- tsconfig.json 생성
+  ```bash
+  $tsc --init
+  ```
+- tsconfig.json 세팅
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1feb32c9-ff53-4258-b1a0-c6f75b776a6e/Untitled.png)
+
+## Styled-components 라이브러리 설치 및 적용
+
+### 설치
 
 ```bash
-npm run dev
-# or
-yarn dev
+$npm install @types/styled-components
+또는
+$yarn add @types/styled-components
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 적용
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- next.js 에 styled-components 를 적용하기 위해서는 설치 외 또 다른 설정이 필요하다.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## babelrc 파일 생성 및 설정
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- babel : JS 컴파일러이다. 최신버전의 JS 문법을 브라우저가 이해할 수 없기 때문에, babel이 브라우저가 이해할 수 있도록 컴파일 시켜주는 역할을 한다.
+- styled-components의 경우 문자열 안에 css코드를 적게 되는데, 이 부분을 브라우저가 이해할 수 있도록 해주기 위해 babelrc 파일을 생성해서 styled-components를 브라우저가 이해할 수 있도록 해주는 것이다.
 
-## Learn More
+### 설치
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+$npm install babel-plugin-styled-components
+또는
+$yarn add babel-plugin-styled-components
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 적용
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `.babelrc` 파일을 생성해서 아래와 같이 세팅한다.
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dddd8e95-1ce4-4318-8602-168738b7be04/Untitled.png)
 
-## Deploy on Vercel
+## globalStyle 과 theme
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 기본적으로 적용되는 css들을 reset하고 자주 쓰는 css 조합을 theme로 등록해두면 편하게 css 속성들을 적용해 나갈 수 있다.
+- globalStyle 파일에서는 reset.css 와 같은 역할을 할 수 있도록 세팅한다.
+- theme에서는 `display: flex; align-item: center;` 와 같이 자주 사용하는 css 세트를 만들어서 등록해둔다.
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/39baad33-c5c3-4f5f-af39-2b65028072e0/Untitled.png)
+- Home.module.css는 무시하고 globalstyle과 theme만 보면 된다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## \_app.js 세팅
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b646dc06-934f-4696-9f96-cb2ccdc16c1b/Untitled.png)
+
+- 위와 같이 설정해둔 GlobalStyle과 theme를 전역으로 사용할 수 있도록 pages/\_app.js 에 세팅해준다.
+- 절대경로로 파일을 import 하는 방법은 tsconfig.json 파일에서 “baseUrl” 부분을 설정해주면 된다.
+- 보통 `“./src”` 부터 많이 시작할 경우 `“baseUrl”: “./src”` 으로 세팅한다
+
+## \_document.js 세팅
+
+- SSR을 할 때도, styled-components를 적용할 수 있도록 설정해준다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a0a62b44-4a84-42fa-abf9-20a6ad35d59d/Untitled.png)
+
+- SSR에서 styled-components는 사용자가 접속하였을 때, 변환되기 때문에 깜빡이는 현상이 생기게 된다. 그래서 미리 css를 적용시켜두어야 깜빡이는 현상 없이 페이지를 실행할 수 있는데 이것을 \_document.js 에 세팅하는 것이다.
+- [https://velog.io/@geonoo99/NextJS-세팅하기](https://velog.io/@geonoo99/NextJS-%EC%84%B8%ED%8C%85%ED%95%98%EA%B8%B0)
+
+## 새로운 페이지 만들기
+
+- Next에서 기본적으로 생성되는 pages 폴더 내부에 페이지 파일을 만들면, 자동으로 인식하여 라우팅까지 해준다.
+
+### Link 컴포넌트
+
+- `import Link from ‘next/link’` 구문을 통해 Link 컴포넌트를 불러와 연결한다.
+- 자동완성 기능으로 import 할 때, `import { Link } from ‘...’` 형식으로 정의되는건 아닌지 확인!! (에러발생할 수 있음)
+- <Link> 컴포넌트 안에 <a> 태그를 반드시 넣어주어야 한다.
+- <Link href=””> 에 연결시킬 페이지 컴포넌트의 path 를 삽입한다.
+- 페이지 컴포넌트는 `export default` 로 내보내야 한다.
+
+```jsx
+// pages/test.js
+
+import React from 'react';
+import Link from 'next/link';
+
+function Test() {
+  return (
+    <div>
+      <h1> Hi Hi Hi</h1>
+      <Link href="/">
+        <a>Back to Home</a>
+      </Link>
+    </div>
+  );
+}
+
+export default Test;
+```
+
+```jsx
+// pages/index.js
+
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from '../styles/Home.module.css';
+
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Create Next App</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+          <Link href="/test">
+            <a className={styles.card}>
+              <h2>Here I am</h2>
+              <p>여기는 테스트용 페이지입니다.</p>
+            </a>
+          </Link>
+        </div>
+      </main>
+    </div>
+  );
+}
+```
+
+## 에러
+
+- 자세히
+  ### `Can't resolve 'styled-components'` styled-comoponents 라이브러리 오류
+  - 증상: \_\_app.js 에서 ThemeProvider 컴포넌트를 import 하는 구문에서 styled-compoents 라이브러리를 찾을 수 없다는 에러가 발생하였다.
+  - 원인: \_\_app.js 는 자바스크립트 파일이기 때문에 @types/styled-components 가 아닌 일반 styled-components 패키지로부터 import 해야한다. 하지만, 나는 typescript 프로젝트 파일 만드는 것에만 집중한 나머지 @types 라이브러리 패키지만 설치한 것이다.
+  - 솔루션 : 일반 자바스크립트용 styled-components 패키지를 설치하여 해결하였다.
+    `yarn add styled-components`
+  ### **`Error: Element type is invalid`: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.**
+  - 증상 : 테스트 페이지 컴포넌트를 생성하여 라우팅 하는 과정에서 발생하였다. 에러 구문을 간단히 해석해보자면 **컴포넌트의 export 형식과 import 형식 정의가 잘못되었다는 것이다.**
+  - 원인 : \_app.js 에서 GlobalStyle 컴포넌트를 불러오는 import 구문이 원인이었다. GlobalStyle 이 `default export` 가 아닌 `export` 로 되어 있었는데, \_app.js 에서는 `import GlobalStyle from ‘./...’` 로 임포트하려고 하여 충돌이 발생한 것이다.
+  - 솔루션 : GlobalStyle.ts 에서 `export` → `default export` 로 수정하여 해결하였다.
