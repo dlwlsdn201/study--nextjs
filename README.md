@@ -13,14 +13,14 @@
 - Fast Refresh 지원
 - 코드 변경 시 자동 Refresh 지원
 - **코드 스플리팅**: 일반적인 CRA 에서는 초기 렌더링 때 모든 컴포넌트를 내려받는다. 하지만 규모가 커지고, 용량이 커지면 로딩 속도가 지연될 수 있는 문제점이 있다. Next는 이러한 문제점을 개선하여 필요에 따라 파일을 불러올 수 있게 여러 개의 파일을 분리하는 코드 스플리팅을 사용한다. 폴더 구조를 보면 pages 폴더 안에 각 page 즉, 라우트들이 들어가며, Components 폴더에는 React 컴포넌트들이 들어가게 된다. 예를 들어, 브라우저가 실행되고, 사용자가 접속을 하게 되면, 첫 페이지인 index page만 불러오게 되고, 그 이후에 다른 페이지로 넘어갔을 때는 해당 페이지만 불러오게 됨.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5dbfd8ba-e746-40f6-b5fa-d1c4ad43d34a/Untitled.png)
+ ![image](https://user-images.githubusercontent.com/53039583/158048617-5a610fce-d9f6-402b-94bb-76875f4b4d8d.png)
 - **간단한 CSR 제공** : 사용방법은 **Router**와 **Link**를 모두 **import** 해서 사용할 수 있다. 먼저 **Link**에서는 `href`와 `as` props가 있는데 이 `href`는 해당 페이지로 이동해 주는 역할을 하고, `as`는 href의 URL을 조금 더 직관적으로 만들어주는 역할을 해준다. Router는 링크와 동일하게 해당 페이지로 이동해주는 역할을 하지만 개발자에게 조금 더 제어권을 넘겨줘서 쉽게 Redirect도 가능하다.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/72055a33-8ae5-43e8-93ea-e7fb2a04921c/Untitled.png)
+  ![image](https://user-images.githubusercontent.com/53039583/158048627-07684545-3fd6-4440-8577-4044a95d92de.png)
 - \***\*커스텀 API 서버 (as - 라우트 마스킹) :\*\*** 만약에 Link 컴포넌트에서 as를 사용하게 되면 실제 페이지가 없는 곳에 요청하게 된다. 그래서 직접 커스텀 서버를 생성해서 as의 URL이 href를 바라볼 수 있게 처리를 따로 해줘야 새로 고침이나 뒤로 갔을 때도 렌더링이 가능해진다.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/db87e19e-8ce1-4293-b4e4-5d58df430a95/Untitled.png)
+  ![image](https://user-images.githubusercontent.com/53039583/158048636-8d8c6215-30bd-4d16-8dd2-cf91604b6729.png)
 - \***\*getInitialProps():\*\*** Next의 핵심기능인 getInitialProps 함수를 통해 데이터를 가져올 수 있다. 밑에 코드를 보면 React의 ComponentDidMount 는 렌더링이 두 번 되지만, Next에서는 데이터를 미리 갖고 오기 때문에 한 번에 렌더링이 가능하다.
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f9b09402-06ce-4505-a614-9249467b4f1a/Untitled.png)
-  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a42e6496-44fb-4a9b-b083-3c735626bcd1/Untitled.png)
+  ![image](https://user-images.githubusercontent.com/53039583/158048640-d39dd5b4-aa0c-4fd5-87cf-5c224a2a10e5.png)
+  ![image](https://user-images.githubusercontent.com/53039583/158048649-d9be44dc-a0f3-4d3d-9c35-636b91422fca.png)
 
 ---
 
