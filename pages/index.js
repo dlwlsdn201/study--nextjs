@@ -13,9 +13,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Welcome to JinWoo&apos;s NextJS Page!</h1>
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -23,22 +21,26 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          <a
+            href="https://dlwlsdn201.github.io/ToDoList/"
+            className={styles.card}
+          >
+            <h2>투두리스트</h2>
+            <p>
+              {' '}
+              HTML5, CSS3, Vanila JS들로 구현한 투두 리스트 프로젝트 입니다.
+            </p>
           </a>
 
           <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
+            href="https://dlwlsdn201.github.io/movie-rank-page/"
             className={styles.card}
           >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
+            <h2>박스오피스 영화 랭킹 사이트</h2>
+            <p>
+              Typescript를 기반으로 구현한 박스오피스 영화 랭킹 서비스
+              사이트입니다.
+            </p>
           </a>
           <Link href="/test">
             <a className={styles.card}>
@@ -47,14 +49,23 @@ export default function Home() {
             </a>
           </Link>
           <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://dlwlsdn201.github.io/portpolio-developing/"
             className={styles.card}
           >
-            <h2>Deploy &rarr;</h2>
+            <h2>포트폴리오 페이지</h2>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              fullPage scroll 애니메이션을 기반으로 구현한 포트폴리오
+              페이지입니다 .
             </p>
           </a>
+          <Link href="/test">
+            <a className={styles.card}>
+              <h2>Test</h2>
+              <p>
+                Instantly deploy your Next.js site to a public URL with Vercel.
+              </p>
+            </a>
+          </Link>
         </div>
       </main>
 
