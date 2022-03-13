@@ -16,11 +16,17 @@
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.1.2",
     "styled-components": "^5.3.3",
     "typescript": "^4.6.2"
   },
   "devDependencies": {
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/dlwlsdn201/study__nextJS",
+  "author": "jinWoo_Lee <dlwlsdn201@naver.com>",
+  "license": "MIT"
 }

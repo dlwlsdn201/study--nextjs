@@ -1,12 +1,15 @@
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
 
-const Test = () => {
+function Test() {
   return (
-    <Link href="/">
-      <a>Back To the Home</a>
-    </Link>
+    <div>
+      <h1> Hi Hi Hi</h1>
+      <Link href="/">
+        <a>Back to Home</a>
+      </Link>
+    </div>
   );
-};
+}
 
 export default Test;
