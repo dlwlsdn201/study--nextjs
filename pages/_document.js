@@ -6,10 +6,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
           {/* // 여기에 폰트 임포팅 */}
           {/* // 여기에 공통 CSS e.g.reset-css/common.css */}
         </Head>
