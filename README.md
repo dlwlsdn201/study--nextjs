@@ -283,6 +283,14 @@ $yarn add babel-plugin-styled-components
   - 원인 : \_app.js 에서 GlobalStyle 컴포넌트를 불러오는 import 구문이 원인이었다. GlobalStyle 이 `default export` 가 아닌 `export` 로 되어 있었는데, \_app.js 에서는 `import GlobalStyle from ‘./...’` 로 임포트하려고 하여 충돌이 발생한 것이다.
   - 솔루션 : GlobalStyle.ts 에서 `export` → `default export` 로 수정하여 해결하였다.
 
+  ### `viewport meta tags should not be used in _document.js's <Head>`
+
+   - 증상
+       ![image](https://user-images.githubusercontent.com/53039583/158181338-20a7147b-27fd-4e47-a480-46e180e0aeee.png)
+
+   - 원인: _document.js 스크립트 파일의 <Head></Head> 내부에 `<meta viewport=””/>` 태그가 들어있어서 발생
+   - 솔루션: `<meta viewport=””/>` 태그를 _document.js 가 아니라 _app.js 의 <Head></Head> 내부에 넣어준다
+ 
 ## 참고
   - _app.js 와 _document.js
     - https://merrily-code.tistory.com/154
