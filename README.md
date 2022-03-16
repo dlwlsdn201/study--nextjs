@@ -198,6 +198,7 @@ $yarn dev
 > - <Link> 컴포넌트 안에 <a> 태그를 반드시 넣어주어야 한다.
 > - <Link href=””> 에 연결시킬 페이지 컴포넌트의 path 를 삽입한다.
 > - 페이지 컴포넌트는 `export default` 로 내보내야 한다.
+>
 >   ```jsx
 >   // pages/test.js
 >
@@ -217,6 +218,7 @@ $yarn dev
 >
 >   export default Test;
 >   ```
+>
 >   ```jsx
 >   // pages/index.js
 >
@@ -246,6 +248,7 @@ $yarn dev
 >     );
 >   }
 >   ```
+>
 >   <br/>
 
 ## Dynamic Routes (동적 라우팅)
@@ -261,7 +264,9 @@ $yarn dev
 > ### 예시
 >
 > - 화장품 온라인몰에서 상품별 ID 값으로 상세 상품 페이지를 라우팅할 때
+>
 >   - **pages/ItemList.tsx**
+>
 >     ```jsx
 >     import React from 'react';
 >     import { Grid, Image } from 'semantic-ui-react';
@@ -302,7 +307,9 @@ $yarn dev
 >
 >     export default ItemList;
 >     ```
+>
 >   - **_pages/post/[id].js_**
+>
 >     ```jsx
 >     import { useRouter } from 'next/router';
 >     import Item from './../../src/components/Item';
@@ -333,7 +340,9 @@ $yarn dev
 >
 >     export default Post;
 >     ```
+>
 >   - **_src/components/Item_**
+>
 >     ```jsx
 >     import React from 'react';
 >     import { Button, Image, Divider } from 'semantic-ui-react';
@@ -378,7 +387,270 @@ $yarn dev
 >
 >     export default Item;
 >     ```
+>
 >     ![image](https://user-images.githubusercontent.com/53039583/158183327-622d6b9b-c7e4-4c6c-b760-e90b52d2cd40.png)
+>
+> ## Next JS는 모든 페이지를 사전 렌더링(Pre-rendering) 한다
+>
+> - 더 나은 퍼포먼스
+> - 검색 엔진 최적화(SEO)
+>
+> 사전 렌더링은 아래와 같이 두 가지 방식이 있으며, 차이점은 html 파일을 생성하는 시점이다.
+>
+> > ### 1. 정적 생성
+> >
+> > - 프로젝트가 build 하는 시점에 html 파일들이 생성
+> > - 모든 요청에 재사용
+> > - 퍼포먼스 이유로 **Next JS는 정적 생성을 권장함**
+> > - 정적 생성된 page들은 CDN에 cache
+> > - `getStaticProps` / `getStaticPaths`
+>
+> > ### 2. SSR (Dynamic Rendering)
+> >
+> > - 매 요청마다 html을 생성
+> > - **항상 최신 상태**를 유지 (대신 정적 생성보다는 퍼포먼스가 떨어짐)
+> > - `getServerSideProps`
+>
+> ## <a> 태그 또는 location 대신 <Link/>, next Router 을 사용하는 이유?
+>
+> - \<a> 태그 또는 location.href 을 이용하는 대신 <Link/>, next Router 을 사용하는 이유는 바로 링크 이동 시 페이지의 새로고침 여부이다.
+>   - \<a> tag, location.href 로 링크 이동 시 ⇒ 페이지가 새로고침 됨 (SPA 장점이 사라짐)
+>     - 관리되는 컴포넌트의 state 가 초기화될 수 있다.
+>   - \<Link/>, next Router 로 링크 이동 시 ⇒ **페이지 새로고침 X, 내용물만 업데이트** 됨.
+>
+> ## API Loading 상태를 관리를 위한 state 활용
+>
+> - SSR 이 아닌 정적 생성된 페이지를 렌더링 시, 데이터를 로드하는 동안 빈 화면이 출력되어 UX 적으로 좋지않을 수 있다. 따라서, data Loading 상태를 관리하는 state 을 통해 Loading 페이지를 추가 함으로서, 개선할 수 있다.
+>
+>   - Loading 상태 화면 구현 전
+>
+>     ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/57422502-f19e-4c44-8449-b7f632920921/before.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220316%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220316T132232Z&X-Amz-Expires=86400&X-Amz-Signature=bbac4288f8f7276589a4956f5939a608e5a1e6c8fdd43ed9adb1e53c5ca91b5a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22before.gif%22&x-id=GetObject)
+>
+>   - Loading 상태 하면 구현 후
+>
+>     ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/52e8a656-eaa3-4781-9875-b7a01a09f9b7/after.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220316%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220316T132216Z&X-Amz-Expires=86400&X-Amz-Signature=3ec318eb90edeb7dbc98e1246be2619f39af717153602deea222f8d14a5257a0&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22after.gif%22&x-id=GetObject)
+>
+>     ```jsx
+>     import ItemList from './../src/components/ItemList';
+>     import { Divider, Header, Loader } from 'semantic-ui-react';
+>
+>     export default function Home() {
+>       const [list, setList] = useState([]);
+>       const [isLoading, setIsLoading] = useState(true);
+>
+>       const API_URL =
+>         'http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline';
+>
+>       const getData = () => {
+>         setIsLoading(true);
+>         axios.get(API_URL).then((res) => {
+>           console.log(res);
+>           setList(res.data);
+>           setIsLoading(false);
+>         });
+>       };
+>
+>       useEffect(() => {
+>         getData();
+>       }, []);
+>
+>       return (
+>         <div>
+>           <Head>
+>             <title>HOME | 화장품</title>
+>             <meta name="description" content="화장품 상품 페이지입니다" />
+>           </Head>
+>           {isLoading ? (
+>             <Loader content="Loading" active></Loader>
+>           ) : (
+>             <>
+>               <Header as="h3" style={{ paddingTop: 40 }}>
+>                 베스트 상품
+>               </Header>
+>               <Divider />
+>               <ItemList list={list} />
+>             </>
+>           )}
+>         </div>
+>       );
+>     }\
+>     ```
+>
+> ## 특정 페이지 SSR 적용하기
+>
+> ### `getServerSideProps(context) {...}` 비동기 함수 이용
+>
+> - **context** : params, 요청, 응답 쿼리 등을 담고 있는 파라미터이다.
+> - 예시로, 화장품 상품의 상세 페이지인 `pages/view/[id].js` 에 SSR 을 적용해보았다.
+> - SSR 을 적용하려는 페이지 컴포넌트의 내부에 아래와 같이 작성하면, Next.js 가 자동으로 read 하여 SSR을 적용시켜준다
+>   ```jsx
+>   // pages/view/[id].js  상품 상세 페이지 컴포넌트
+>
+>   import axios from 'axios';
+>   import { useRouter } from 'next/router';
+>   import { useEffect, useState } from 'react';
+>   import Item from './../../src/components/Item';
+>   import { Loader } from 'semantic-ui-react';
+>
+>   const Post = ({ item }) => {
+>     // getServerSideProps() 의 return props 값
+>     const router = useRouter();
+>     const { id } = router.query;
+>
+>     const [item, setItem] = useState({});
+>     const [isLoading, setIsLoading] = useState(true);
+>
+>     const API_URL = `http://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
+>
+>     const getData = () => {
+>       axios.get(API_URL).then((res) => {
+>         console.log(res.data);
+>         setItem(res.data);
+>         setIsLoading(false);
+>       });
+>     };
+>
+>     useEffect(() => {
+>       if (id && id > 0) {
+>         getData();
+>       }
+>     }, []);
+>
+>     return isLoading ? (
+>       <Loader content="Loading" active />
+>     ) : (
+>       <Item data={item} />
+>     );
+>   };
+>
+>   export const getServerSideProps = async (context) => {
+>     const id = context.params.id;
+>     const apiUrl = `http://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
+>     const res = await axios.get(apiUrl);
+>     const data = res.data;
+>
+>     return {
+>       props: {
+>         item: data
+>       }
+>     };
+>   };
+>
+>   export default Post;
+>   ```
+> - `getServerSideProps()` 의 return 값인 { props: { item: data } } 는 해당 page 컴포넌트의 prop 으로 전달될 수 있다.
+>
+> ## Navigation 메뉴로 페이지 이동 시 라우터 사용 방법
+>
+> - 보통 페이지에서 카테고리 메뉴와 같은 Navigation 으로 페이지를 이동하는 경우가 있다.
+>   이럴 때, router를 아래와 같이 사용한다.
+>
+> ```jsx
+> import { useRouter } from 'next/router';
+> import React from 'react';
+> import { Menu } from 'semantic-ui-react';
+>
+> const Gnb = () => {
+>   const activeItem = 'home';
+>   const router = useRouter();
+>
+>   const goLink = (e, data) => {
+>     if (data.name === 'home') {
+>       router.push('/');
+>     } else if (data.name === 'about') {
+>       router.push('/about');
+>     }
+>   };
+>
+>   return (
+>     <Menu inverted>
+>       <Menu.Item
+>         name="home"
+>         active={activeItem === 'home'}
+>         onClick={goLink}
+>       />
+>       <Menu.Item
+>         name="about"
+>         active={activeItem === 'about'}
+>         onClick={goLink}
+>       />
+>     </Menu>
+>   );
+> };
+>
+> export default Gnb;
+> ```
+>
+> - 여기서, useRouter() 로 정의한 `router` 변수에는 아래와 같은 데이터들이 들어있다.
+>   ( router.push(’`PATH`’) 할 경우, pathname, route, asPath 가 `PATH` 값으로 업데이트 된다)
+>   ```json
+>   // useRouter()
+>
+>   {
+>     "pathname": "/view/[id]", // 파일명
+>     "route": "/view/[id]",
+>     "query": {
+>       "id": "468" // 쿼리 데이터
+>     },
+>     "asPath": "/view/468", // 실제 주소(url)
+>     "components": {
+>       "/view/[id]": {
+>         "styleSheets": [],
+>         "__N_SSP": true,
+>         "__N_RSC": false,
+>         "props": {
+>           "pageProps": {
+>             "item": {
+>               "id": 468,
+>               "brand": "maybelline",
+>               "name": "Maybelline Face Studio Master Hi-Light Light Booster Blush",
+>               "price": "14.99",
+>               "price_sign": null,
+>               "currency": null,
+>               "image_link": "https://d3t32hsnjxo7q6.cloudfront.net/i/4621032a92cb428ad640c105b944b39c_ra,w158,h184_pa,w158,h184.png",
+>               "product_link": "https://well.ca/products/maybelline-face-studio-master_88831.html",
+>               "website_link": "https://well.ca",
+>               "description": "Maybelline Face Studio Master Hi-Light Light Boosting blush formula has an expert \nbalance of shade + shimmer illuminator for natural glow. Skin goes \nsoft-lit with zero glitz.\n\n\t\tFor Best Results: Brush over all shades in palette and gently sweep over \ncheekbones, brow bones, and temples, or anywhere light naturally touches\n the face.\n\n\t\t\n\t\n\n                    ",
+>               "rating": null,
+>               "category": "powder",
+>               "product_type": "blush",
+>               "tag_list": [],
+>               "created_at": "2016-10-01T18:35:27.706Z",
+>               "updated_at": "2017-12-23T21:08:47.102Z",
+>               "product_api_url": "http://makeup-api.herokuapp.com/api/v1/products/468.json",
+>               "api_featured_image": "//s3.amazonaws.com/donovanbailey/products/api_featured_images/000/000/468/original/open-uri20171223-4-sz64re?1514063327",
+>               "product_colors": []
+>             }
+>           },
+>           "__N_SSP": true
+>         }
+>       },
+>       "/_app": {
+>         "styleSheets": []
+>       },
+>       "/about": {
+>         "styleSheets": [],
+>         "__N_RSC": false,
+>         "props": {
+>           "pageProps": {}
+>         }
+>       },
+>       "/": {
+>         "styleSheets": [],
+>         "__N_RSC": false,
+>         "props": {
+>           "pageProps": {}
+>         }
+>       }
+>     },
+>     "isFallback": false,
+>     "basePath": "",
+>     "isReady": true,
+>     "isPreview": false,
+>     "isLocaleDomain": false,
+>     "events": {}
+>   }
+>   ```
 
 ---
 
@@ -411,3 +683,12 @@ $yarn dev
 
 - \_app.js 와 \_document.js
   - https://merrily-code.tistory.com/154
+
+### 화장품 상품 페이지는 정적 생성? SSR ?
+
+- home 페이지(전체 상품 리스트)
+  - 화면을 그리는 API를 비동기로 호출함. <br/>
+    즉, 화면에 들어온 후에 화장품 리스트를 받기 위해서 API를 호출하고 있으니 굳이 SSR 이 필요없음.
+- 상품 상세 페이지
+  - 매번 상품들의 title 과 내용들이 바뀔 수 있기 때문에, 화면을 보여주기 전에 데이터가 미리 준비되어 있어야 한다.
+  - 데이터가 미리 준비되어 있어야 검색 엔진에서도 읽을 수 있고 SNS로 공유 했을 때도 정보가 출력된다.
