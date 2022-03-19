@@ -17,7 +17,7 @@ const ItemList = ({ list }) => {
       <Grid.Row>
         {list.map((item: product, index: number) => (
           <Grid.Column key={index}>
-            <Link href={`/view/${item.id}`}>
+            <Link href="/detail/[id]" as={`/detail/${item.id}`}>
               <a>
                 <Image
                   alt={item.name}
