@@ -483,6 +483,7 @@ $yarn dev
 > - **context** : params, 요청, 응답 쿼리 등을 담고 있는 파라미터이다.
 > - 예시로, 화장품 상품의 상세 페이지인 `pages/view/[id].js` 에 SSR 을 적용해보았다.
 > - SSR 을 적용하려는 페이지 컴포넌트의 내부에 아래와 같이 작성하면, Next.js 가 자동으로 read 하여 SSR을 적용시켜준다
+>
 >   ```jsx
 >   // pages/view/[id].js  상품 상세 페이지 컴포넌트
 >
@@ -538,6 +539,7 @@ $yarn dev
 >
 >   export default Post;
 >   ```
+>
 > - `getServerSideProps()` 의 return 값인 { props: { item: data } } 는 해당 page 컴포넌트의 prop 으로 전달될 수 있다.
 >
 > ## Navigation 메뉴로 페이지 이동 시 라우터 사용 방법
@@ -583,6 +585,7 @@ $yarn dev
 >
 > - 여기서, useRouter() 로 정의한 `router` 변수에는 아래와 같은 데이터들이 들어있다.
 >   ( router.push(’`PATH`’) 할 경우, pathname, route, asPath 가 `PATH` 값으로 업데이트 된다)
+>
 >   ```json
 >   // useRouter()
 >
@@ -651,6 +654,232 @@ $yarn dev
 >     "events": {}
 >   }
 >   ```
+>
+> ## Error Pages
+>
+> - Next JS 에서는 기본적으로 에러 페이지를 static으로 제공한다.
+>
+> ### Custom Error Page 생성하기
+>
+> - 기본적으로 제공되는 에러 페이지 디자인이나 추가할 기능이 따로 있을 경우, 커스터마이징 할 수 있다.
+>
+> - **404 Error 페이지일 경우**
+>   - `pages/404.js` 을 만들어서 페이지를 구현한다 (정적 구현)
+> - **500 Error 페이지일 경우**
+>   - **Production** 에서 확인해야함 (dev 모드에서는 서버 에러 시, 로그를 보여주기 때문)
+>   - `pages/_error.js` 을 만들어서 페이지 구현
+>   - 이 페이지는 정적으로 최적화 되어있지는 않다 (에러 발생 시, 서버 쪽으로 에러를 보내는 작업을 동반하는 경우가 많기 때문)
+>   - 아래와 같이 작성하면, 클라이언트 측과 서버 측의 에러들을 모두 관리할 수 있다.
+>     (따라서, pages/404.js 을 지워도 404 에러 페이지 동작은 한다. 하지만, 404는 static 으로 제공하는게 훨씬 좋기 때문에 pages/404.js 을 만들어서 따로 구현하는 것이 좋다)
+>         ```jsx
+>         const Error = ({ staticCode }) => {
+>         	return (
+>         		(...)
+>         	)
+>         }
+>
+>         Error.getInitialProps = ({ res, err }) => {
+>         	const statusCode = res ? res.statusCode : err ? err.statusCode: 404;
+>         	return { statusCode };
+>         };
+>
+>         export default Error;
+>         ```
+>
+> ## 환경 변수
+>
+> - 개발 서버와 프로덕션 서버에서 각각 다른 데이터가 표현되어야 할 때 환경변수를 설정해주어야 한다
+> - 환경 변수의 형식은 각 환경에 따라 조금씩 다르다.
+>   ```json
+>   // node js 환경에서 환경변수를 불러오는 형식
+>   [*process.env.변수명*]
+>
+>   // browser(Client) 환경에서 환경변수를 불러오는 형식
+>   [*process.env.NEXT_PUBLIC_변수명*]
+>   ```
+>
+> ### 개발서버용 환경변수
+>
+> - `.env.development`
+>   ```tsx
+>   // ./env.development
+>
+>   // 환경변수명=VALUE
+>   NAME="Development"
+>   NEXT_PUBLIC_API_URL=http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline
+>   ```
+>
+> ### 프로덕션용 환경변수
+>
+> - `.env.production`
+>   ```tsx
+>   // ./env.production
+>
+>   // 환경변수명=VALUE
+>   NAME="Production"
+>   NEXT_PUBLIC_API_URL=http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline
+>   ```
+>
+> ### **환경 변수가 필요한 이유 ?**
+>
+> - 환경 변수가 필요한 이유는 우리가 웹 애플리케이션을 만들 때 개발 모드(development mode)와 배포 모드(production mode)에 따라 다르게 코딩해야 하기 때문이다.
+>   보통 회사의 서버에는 개발 서버가 따로 있고 배포 서버가 따로 있는데, 이럴 경우 다른 API Url 또는 비밀 키를 사용해야 할 경우가 있다.
+>   예를 들어, **개발 중에는 development-api.company.com라는 Url을 사용**하고,
+>   **라이브로 배포할 때는 api.company.com 을 사용해야 할 때이다**.
+>   또 다른 예로 개발 및 테스트 중에 실제 결제 구현을 하지 않도록 **테스트 API 키**를 사용하려고 할 때이다.
+>
+> ### **NextJS에서 환경 변수를 어떻게 사용할까?**
+>
+> - 단순하게 NextJS 프로젝트 최상단 폴더에서 .env 파일을 만들면 된다.
+>   이 파일 내에서 우리는 다음과 같이 환경 변수를 선언할 수 있다.
+>
+> ```
+> NEXT_PUBLIC_API_URL = "https://development-api.company.com"
+> PAYMENT_KEY = "*************"
+> ```
+>
+> 그런 다음 `process.env.VARIABLE_NAME` 을 사용하여 .env 파일에서 정의한 변수를 참조할 수 있다.
+>
+> 예를 들어, `**axios`를 사용하여 API에 GET 요청을 한다면\*\* 다음과 같이 사용하면 된다.
+>
+> ```tsx
+> axios.get(`${process.env.NEXT_PUBLIC_API_URL}/customers`);
+> ```
+>
+> ### **NEXT_PUBLIC은 무슨 뜻인가?**
+>
+> - NextJS 애플리케이션에는 **두 부분**이 있다는 것을 알아야한다.
+>   - React 컴포넌트를 사용하여 빌드되고 클라이언트에게만 보여지는 React UI 부분
+>   - NextJS 애플리케이션으로 서버에서 실행되는 겁니다.
+>   즉, 다음과 같은 작업이 **NextJS 애플리케이션의 서버 실행에 해당**된다.
+>   - `/pages/api`(라우팅할 때)
+>   - `getServerSideProps()` (serverSide props를 가져올 때)
+>   - `getStaticProps()` (build시 한 번만 props를 가져올 때)
+>
+> 이 세 가지 기능은 항상 서버에서 실행되므로 NodeJS의 **프로세스(process)에 액세스할 수 있다**.
+>
+> 이 데이터는 클라이언트에 직접 전송되지 않으므로 결제정보 같은 민감한 값을 사용해도 안전할 수 있는 것이다.
+>
+> 반면에 **클라이언트로 전송되는 데이터**는 쉽게 노출될 수 있으므로 민감한 값을 클라이언트에 전송하는 것은 위험하다.
+>
+> 이러한 이유로 **NextJS**는 `NEXT_PUBLIC_` 이라는 접두사를 사용하지 않으면, **클라이언트 코드에서 환경 변수에 액세스하는 것을 허용하지 않는다**.
+>
+> **React 컴포넌트에서 액세스해야 하는 환경 변수가 있는 경우 →** `NEXT_PUBLIC_` 라는 접두사 **사용**
+>
+> **서버 측에서만 사용해야 하는 변수가 있는 경우 →**  `NEXT_PUBLIC_` 같은 접두사 **사용 X**
+>
+> ### **.env 파일을 github에 올려도 될까?**
+>
+> - .env 파일은 민감한 정보를 가지고 있기 때문에 우리가 github에 push할때는 빼는게 좋다.
+>   그래서 가장 좋은 방법은 `[.env.example 이름]`으로 필요한 환경 변수가 **템플릿 형태**로 있는 파일로 만드는 것이 중요하다.
+>   **서버에 배포**하거나 다른 개발자가 **git clone 해서 사용**할 때 **.env.example 파일**을 적당하게 수정하여 앱을 실행하는 데 필요한 모든 환경 변수를 채울 수 있다.
+>   .env 파일에는 \***\*일반적으로 **비밀 키(SECRET_KEY)**와 **토큰(TOKEN)** 같은 중요한 데이터가 포함되어 있기 때문에 **git 에 포함하지 않는 것이 좋다 →\*\* gitignore 파일에 `.env`꼭 추가하기!!
+
+> ## 정적 생성(Static Generation)
+>
+> ### Pre-rendering(사전 렌더링)
+>
+> - 기본적으로 **모든 페이지를 사전 렌더링**
+> - **사전에 HTML 파일들을 빌드**한다는 의미
+> - 퍼포먼스 향상, SEO
+>
+>   ![image](https://user-images.githubusercontent.com/53039583/159113764-5ce757d5-ee38-48ce-a530-a1cf46053a99.png)
+>
+>   ![image](https://user-images.githubusercontent.com/53039583/159113769-426c29fe-76bc-477b-b190-561b48110aa2.png)
+>
+> - **사전 렌더링의 방식**은 html 생성 타이밍에 따라 아래와 같이 **두 가지**로 나뉜다.
+>
+> ---
+>
+> - **_Static Generation 정적 생성_**
+>   ***
+>   - 빌드 시, html 만들고 유저들이 요청할 때마다 전달해줌
+>   - **마케팅 페이지, 블로그 게시물, 제품 목록, 도움말, 문서** 등 미리 만들어 두는 경우
+>   ![image](https://user-images.githubusercontent.com/53039583/159113783-e56e6eac-a943-4dfa-b3fa-b6debf3cdbcc.png)
+> - **_SSR_**
+>
+>   ***
+>
+>   - 요청을 하면, html을 만들어서 보여줌
+>   - **관리자 페이지, 분석 차트** 등 항상 최신 상태를 유지해야 하는 경우
+>
+>   ![image](https://user-images.githubusercontent.com/53039583/159113787-d47f0640-463c-4184-adb8-1f7619fb099b.png)
+>
+> ---
+>
+> - NEXT JS는 개발자가 페이지별로 개발자가 사전 렌더링 방식을 설정할 수 있다.<br/>
+>   (아래는 예시)
+>
+>       ![image](https://user-images.githubusercontent.com/53039583/159113792-9e805641-add2-4028-bbfb-d7c52d94cc1e.png)
+>
+> - **_동적 라우팅 페이지를 정적생성 하는 조건?_**
+>   - 대개 **dynamic routing page**는 상품별 상세리스트 등 굉장히 많은 종류들의 데이터들을 대상으로 하기 때문에 모든 종류의 html을 생성하는건 불가능하다.
+>   - 대신, 개수가 한정적이고 그 종류별 ID 리스트를 미리 알 수 있다면 `getStaticPath()` 을 사용하여 정적생성 할 수 있다.
+>     - `getStaticPath()` 는 **반드시** `getStaticProps()` **와 함께 사용**되어야 한다. (`getServerSideProps()` 와 사용하면 Error 발생.)
+>     - getStaticPath() 문법
+>       ```jsx
+>       export const getStaticPaths = async() => {
+>         return {
+>           paths: [
+>             { params: { ... } }
+>           ],
+>           fallback: true //
+>         };
+>       }
+>
+>       export const getStaticProps = async () => {
+>         /*
+>       		API request 및 사전에 해야할 작업 코드 구문
+>       	*/
+>         return {
+>           props: {
+>             [propKey]: value,
+>           }
+>         };
+>       };
+>       ```
+>     - getStaticPath() 예시
+>       ```jsx
+>       // pages/detail/[id].js
+>
+>       (...)
+>
+>       export const getStaticPaths = async () => {
+>         return {
+>           paths: [
+>             { params: { id: '740' } },
+>             { params: { id: '730' } },
+>             { params: { id: '729' } }
+>           ],
+>           fallback: true
+>         };
+>       };
+>
+>       export const getStaticProps = async () => {
+>         const apiUrl = process.env.apiUrl;
+>         const res = await axios.get(apiUrl);
+>         const data = res.data;
+>
+>         return {
+>           props: {
+>             list: data,
+>             name: process.env.name
+>           }
+>         };
+>       };
+>       ```
+>
+> ### <Link/> 의 prefetch 속성은 무엇인가?
+>
+> - nextJS 에서 제공하는 Link 컴포넌트에는 default로 `prefetch: true` 속성을 가지고 있다.
+>   이 속성은 **첫 화면** 또는 **스크롤 시**, viewport 범위에 있는 Link 들은 pre-fetch가 되어 `.next/pages/...` 빌드 파일 경로에 html 파일로 **static generation(정적 생성)** 된다.
+>   ![image](https://user-images.githubusercontent.com/53039583/159113797-a116ead3-6596-4736-8eca-2bd7d5333949.png)
+> - **non pre-fetch**
+>   - 초반에 깜빡임 발생
+>   ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9b1d7ecf-9f79-426d-acb0-c6b2651cb73b/non_pre-fetch.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220319%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220319T082753Z&X-Amz-Expires=86400&X-Amz-Signature=afb0a53b940fd1943a8a783d712c376fb21dbb63d0c4aebdc96aa9a1e38e8492&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22non%2520pre-fetch.gif%22&x-id=GetObject)
+> - **pre-fetch**
+>   - 깜빡임 없이 바로 로드
+>   ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f35d47ab-4371-4650-bad4-b215c6800740/pre-fetch.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220319%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220319T082801Z&X-Amz-Expires=86400&X-Amz-Signature=b7309fd3ba5e5e50f41bd9f33297746ff69571214c65f2a05cb608d1c4c3d23f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22pre-fetch.gif%22&x-id=GetObject)
 
 ---
 
@@ -676,6 +905,39 @@ $yarn dev
 >
 > - 원인: \_document.js 스크립트 파일의 <Head></Head> 내부에 `<meta viewport=””/>` 태그가 들어있어서 발생
 > - 솔루션: `<meta viewport=””/>` 태그를 \_document.js 가 아니라 \_app.js 의 <Head></Head> 내부에 넣어준다
+
+> ### **TypeError: Cannot read properties of undefined (reading 'protocol')**
+>
+> - 증상
+>   - .env.development 환경변수 작성 후 변수 `API_URL` 을 `process.env.NEXT_PUBLIC_API_URL` 변수로 바꾼 후 발생
+>
+>     ![image](https://user-images.githubusercontent.com/53039583/159114064-27af9470-dbbf-4497-9c9a-dd76899e0a02.png)
+> - 원인
+>   - 환경변수 적용 시, 서버를 재시작해주어야 한다.
+> - 솔루션
+>   - 개발 서버를 다시 시작했더니 해결되었다.
+
+> ### **TypeError: The "url" argument must be of type string. Received undefined**
+>
+> - 증상
+>   ![image](https://user-images.githubusercontent.com/53039583/159114069-c9e26528-6c12-44d0-a3a9-f6ae9070c1f6.png)
+> - 원인
+>   - `axios.get(URL)` 에서 URL 인자 값이 **undefined** 일 때, 발생한다.
+> - 솔루션
+>   - next.config.js 에 `env: { BASE_URL: process.env.BASE_URL}` 옵션을 삽입하고 개발서버를 재시작 하였더니 해결되었다.
+>   ```jsx
+>   // next.config.js
+>
+>   /** @type {import('next').NextConfig} */
+>   const nextConfig = {
+>     reactStrictMode: true,
+>   +  env: {
+>   +    BASE_URL: process.env.BASE_URL
+>   +  }
+>   };
+>
+>   module.exports = nextConfig;
+>   ```
 
 ---
 
