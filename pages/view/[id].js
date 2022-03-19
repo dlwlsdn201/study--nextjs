@@ -43,6 +43,8 @@ const Post = ({ item, name }) => {
   );
 };
 
+export default Post;
+
 /**
  * getServerSideProps() 의 환경은 브라우저가 아닌 서버이다. 따라서, window 같은거 사용하면 오류 발생.
  * @param {object} context
@@ -56,10 +58,8 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      item: data,
+      list: data,
       name: process.env.name
     }
   };
 };
-
-export default Post;
