@@ -117,7 +117,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "pages/404.js"  ],
   "exclude": [
     "node_modules"
   ]
