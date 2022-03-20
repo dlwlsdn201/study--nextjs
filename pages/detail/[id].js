@@ -38,12 +38,13 @@ const Post = ({ item, name }) => {
 export default Post;
 
 export const getStaticPaths = async () => {
+  const apiUrl = process.env.apiUrl;
+  const res = await axios.get(apiUrl);
+  const data = res.data;
   return {
-    paths: [
-      { params: { id: '740' } },
-      { params: { id: '730' } },
-      { params: { id: '729' } }
-    ],
+    paths: data
+      .slice(0, 9)
+      .map((item) => ({ params: { id: item.id.toString() } })),
     fallback: true
   };
 };
