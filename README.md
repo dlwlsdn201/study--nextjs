@@ -355,7 +355,7 @@ $yarn dev
 >             style={{
 >               display: 'flex',
 >               // justifyContent: 'center',
->               alignItems: 'center'
+>               alignItems: 'center',
 >             }}
 >           >
 >             <div style={{ display: 'inline-block', marginRight: 20 }}>
@@ -367,7 +367,7 @@ $yarn dev
 >                 style={{
 >                   display: 'block',
 >                   color: 'skyblue',
->                   fontSize: '1.4rem'
+>                   fontSize: '1.4rem',
 >                 }}
 >               >
 >                 {`$${price}`}
@@ -532,8 +532,8 @@ $yarn dev
 >
 >     return {
 >       props: {
->         item: data
->       }
+>         item: data,
+>       },
 >     };
 >   };
 >
@@ -666,17 +666,18 @@ $yarn dev
 > - **404 Error 페이지일 경우**
 >   - `pages/404.js` 을 만들어서 페이지를 구현한다 (정적 구현)
 > - **500 Error 페이지일 경우**
+>
 >   - **Production** 에서 확인해야함 (dev 모드에서는 서버 에러 시, 로그를 보여주기 때문)
 >   - `pages/_error.js` 을 만들어서 페이지 구현
 >   - 이 페이지는 정적으로 최적화 되어있지는 않다 (에러 발생 시, 서버 쪽으로 에러를 보내는 작업을 동반하는 경우가 많기 때문)
 >   - 아래와 같이 작성하면, 클라이언트 측과 서버 측의 에러들을 모두 관리할 수 있다.
 >     (따라서, pages/404.js 을 지워도 404 에러 페이지 동작은 한다. 하지만, 404는 static 으로 제공하는게 훨씬 좋기 때문에 pages/404.js 을 만들어서 따로 구현하는 것이 좋다)
->         ```jsx
->         const Error = ({ staticCode }) => {
->         	return (
->         		(...)
->         	)
->         }
+>     ```jsx
+>     const Error = ({ staticCode }) => {
+>     return (
+>     (...)
+>     )
+>     }
 >
 >         Error.getInitialProps = ({ res, err }) => {
 >         	const statusCode = res ? res.statusCode : err ? err.statusCode: 404;
@@ -690,6 +691,7 @@ $yarn dev
 >
 > - 개발 서버와 프로덕션 서버에서 각각 다른 데이터가 표현되어야 할 때 환경변수를 설정해주어야 한다
 > - 환경 변수의 형식은 각 환경에 따라 조금씩 다르다.
+>
 >   ```json
 >   // node js 환경에서 환경변수를 불러오는 형식
 >   [*process.env.변수명*]
@@ -701,6 +703,7 @@ $yarn dev
 > ### 개발서버용 환경변수
 >
 > - `.env.development`
+>
 >   ```tsx
 >   // ./env.development
 >
@@ -712,6 +715,7 @@ $yarn dev
 > ### 프로덕션용 환경변수
 >
 > - `.env.production`
+>
 >   ```tsx
 >   // ./env.production
 >
@@ -751,7 +755,7 @@ $yarn dev
 > - NextJS 애플리케이션에는 **두 부분**이 있다는 것을 알아야한다.
 >   - React 컴포넌트를 사용하여 빌드되고 클라이언트에게만 보여지는 React UI 부분
 >   - NextJS 애플리케이션으로 서버에서 실행되는 겁니다.
->   즉, 다음과 같은 작업이 **NextJS 애플리케이션의 서버 실행에 해당**된다.
+>     즉, 다음과 같은 작업이 **NextJS 애플리케이션의 서버 실행에 해당**된다.
 >   - `/pages/api`(라우팅할 때)
 >   - `getServerSideProps()` (serverSide props를 가져올 때)
 >   - `getStaticProps()` (build시 한 번만 props를 가져올 때)
@@ -791,95 +795,389 @@ $yarn dev
 >
 > ---
 >
-> - **_Static Generation 정적 생성_**
->   ***
->   - 빌드 시, html 만들고 유저들이 요청할 때마다 전달해줌
->   - **마케팅 페이지, 블로그 게시물, 제품 목록, 도움말, 문서** 등 미리 만들어 두는 경우
->   ![image](https://user-images.githubusercontent.com/53039583/159113783-e56e6eac-a943-4dfa-b3fa-b6debf3cdbcc.png)
-> - **_SSR_**
+> > **_Static Generation 정적 생성_**
 >
->   ***
+> - 빌드 시, html 만들고 유저들이 요청할 때마다 전달해줌
+> - **마케팅 페이지, 블로그 게시물, 제품 목록, 도움말, 문서** 등 미리 만들어 두는 경우
 >
->   - 요청을 하면, html을 만들어서 보여줌
->   - **관리자 페이지, 분석 차트** 등 항상 최신 상태를 유지해야 하는 경우
+>       ![image](https://user-images.githubusercontent.com/53039583/159113783-e56e6eac-a943-4dfa-b3fa-b6debf3cdbcc.png)
 >
->   ![image](https://user-images.githubusercontent.com/53039583/159113787-d47f0640-463c-4184-adb8-1f7619fb099b.png)
+>   > **_SSR_**
+>
+> - 요청을 하면, html을 만들어서 보여줌
+> - **관리자 페이지, 분석 차트** 등 항상 최신 상태를 유지해야 하는 경우
+>
+> ![image](https://user-images.githubusercontent.com/53039583/159113787-d47f0640-463c-4184-adb8-1f7619fb099b.png)
 >
 > ---
 >
 > - NEXT JS는 개발자가 페이지별로 개발자가 사전 렌더링 방식을 설정할 수 있다.<br/>
 >   (아래는 예시)
 >
->       ![image](https://user-images.githubusercontent.com/53039583/159113792-9e805641-add2-4028-bbfb-d7c52d94cc1e.png)
+>   ![image](https://user-images.githubusercontent.com/53039583/159113792-9e805641-add2-4028-bbfb-d7c52d94cc1e.png)
 >
-> - **_동적 라우팅 페이지를 정적생성 하는 조건?_**
->   - 대개 **dynamic routing page**는 상품별 상세리스트 등 굉장히 많은 종류들의 데이터들을 대상으로 하기 때문에 모든 종류의 html을 생성하는건 불가능하다.
->   - 대신, 개수가 한정적이고 그 종류별 ID 리스트를 미리 알 수 있다면 `getStaticPath()` 을 사용하여 정적생성 할 수 있다.
->     - `getStaticPath()` 는 **반드시** `getStaticProps()` **와 함께 사용**되어야 한다. (`getServerSideProps()` 와 사용하면 Error 발생.)
->     - getStaticPath() 문법
->       ```jsx
->       export const getStaticPaths = async() => {
->         return {
->           paths: [
->             { params: { ... } }
->           ],
->           fallback: true //
->         };
->       }
+> > **_동적 라우팅 페이지를 정적생성 하는 조건?_**
 >
->       export const getStaticProps = async () => {
->         /*
->       		API request 및 사전에 해야할 작업 코드 구문
->       	*/
->         return {
->           props: {
->             [propKey]: value,
->           }
->         };
+> - 대개 **dynamic routing page**는 상품별 상세리스트 등 굉장히 많은 종류들의 데이터들을 대상으로 하기 때문에 모든 종류의 html을 생성하는건 불가능하다.
+> - 대신, 개수가 한정적이고 그 종류별 ID 리스트를 미리 알 수 있다면 `getStaticPath()` 을 사용하여 정적생성 할 수 있다.
+>
+>   - `getStaticPath()` 는 **반드시** `getStaticProps()` **와 함께 사용**되어야 한다. (`getServerSideProps()` 와 사용하면 Error 발생.)
+>   - getStaticPath() 문법
+>
+>     ```jsx
+>     export const getStaticPaths = async() => {
+>       return {
+>         paths: [
+>           { params: { ... } }
+>         ],
+>         fallback: true //
 >       };
->       ```
->     - getStaticPath() 예시
->       ```jsx
->       // pages/detail/[id].js
+>     }
 >
->       (...)
->
->       export const getStaticPaths = async () => {
->         return {
->           paths: [
->             { params: { id: '740' } },
->             { params: { id: '730' } },
->             { params: { id: '729' } }
->           ],
->           fallback: true
->         };
+>     export const getStaticProps = async () => {
+>       /*
+>     		API request 및 사전에 해야할 작업 코드 구문
+>     	*/
+>       return {
+>         props: {
+>           [propKey]: value,
+>         }
 >       };
+>     };
+>     ```
 >
->       export const getStaticProps = async () => {
->         const apiUrl = process.env.apiUrl;
->         const res = await axios.get(apiUrl);
->         const data = res.data;
+>   - getStaticPath() 예시
 >
->         return {
->           props: {
->             list: data,
->             name: process.env.name
->           }
->         };
+>     ```jsx
+>     // pages/detail/[id].js
+>
+>     (...)
+>
+>     export const getStaticPaths = async () => {
+>       return {
+>         paths: [
+>           { params: { id: '740' } },
+>           { params: { id: '730' } },
+>           { params: { id: '729' } }
+>         ],
+>         fallback: true
 >       };
->       ```
+>     };
 >
-> ### <Link/> 의 prefetch 속성은 무엇인가?
+>     export const getStaticProps = async () => {
+>       const apiUrl = process.env.apiUrl;
+>       const res = await axios.get(apiUrl);
+>       const data = res.data;
+>
+>       return {
+>         props: {
+>           list: data,
+>           name: process.env.name
+>         }
+>       };
+>     };
+>     ```
+>
+> ### \<Link/> 의 prefetch 속성은 무엇인가?
 >
 > - nextJS 에서 제공하는 Link 컴포넌트에는 default로 `prefetch: true` 속성을 가지고 있다.
 >   이 속성은 **첫 화면** 또는 **스크롤 시**, viewport 범위에 있는 Link 들은 pre-fetch가 되어 `.next/pages/...` 빌드 파일 경로에 html 파일로 **static generation(정적 생성)** 된다.
+>
 >   ![image](https://user-images.githubusercontent.com/53039583/159113797-a116ead3-6596-4736-8eca-2bd7d5333949.png)
+>
 > - **non pre-fetch**
+>
 >   - 초반에 깜빡임 발생
+>
 >   ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9b1d7ecf-9f79-426d-acb0-c6b2651cb73b/non_pre-fetch.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220319%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220319T082753Z&X-Amz-Expires=86400&X-Amz-Signature=afb0a53b940fd1943a8a783d712c376fb21dbb63d0c4aebdc96aa9a1e38e8492&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22non%2520pre-fetch.gif%22&x-id=GetObject)
+>
 > - **pre-fetch**
+>
 >   - 깜빡임 없이 바로 로드
+>
 >   ![image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f35d47ab-4371-4650-bad4-b215c6800740/pre-fetch.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220319%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220319T082801Z&X-Amz-Expires=86400&X-Amz-Signature=b7309fd3ba5e5e50f41bd9f33297746ff69571214c65f2a05cb608d1c4c3d23f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22pre-fetch.gif%22&x-id=GetObject)
+>
+> ## isFallback
+>
+> - page에 대한 Fallback 여부를 Boolean 타입으로 return 해주는 속성이다.
+>
+>   ### Syntax
+>
+>   ```jsx
+>   const router = useRouter();
+>
+>   if (router.isFallback) {
+>   	...
+>   }
+>   ```
+>
+>   ### Usage
+>
+>   - 정적생성 되지 않은 page 일 경우, 최초 접속 시 흰색 빈 화면이 잠깐 나오는데, 이는 fallback 진입 직후 data load가 완료되지 않았기 때문에 발생하는 것이다.
+>   - 이런 현상을 router.isFallback 속성을 통해 Loader 화면으로 구현하여 해결할 수 있다.
+>
+>     ```jsx
+>     // 동적 라우팅을 적용한 상품 상세 페이지
+>     // pages/detail/[id].js
+>
+>     const Post = ({ item, name }) => {
+>       const router = useRouter();
+>
+>       if (router.isFallback) {
+>         return (
+>           <div style={{ padding: '100px 0' }}>
+>             <Loader active inline="centered">
+>               Loading...
+>             </Loader>
+>           </div>
+>         );
+>       }
+>
+>       return (
+>         <>
+>           {item && (
+>             <>
+>               <Head>
+>                 <title>{item.name}</title>
+>                 <meta name="description" content={item.description} />
+>               </Head>
+>               <Item data={item} />;
+>             </>
+>           )}
+>         </>
+>       );
+>     };
+>     ```
+>
+>   - 정적생성 된 상품 페이지의 html 파일
+>
+>     ![image](https://user-images.githubusercontent.com/53039583/159151209-f2617b3b-221e-4426-b835-ae1f735d23ec.png)
+>
+>   - _기존 화면 (isFallback X, Loader 화면 X)_
+>     → 초기 로드 시, 흰색 빈 화면 출력
+>       <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9a423969-5462-424c-9491-5d353c7f0361/Not_isFallback.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220320%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220320T063645Z&X-Amz-Expires=86400&X-Amz-Signature=3f5a813a50f4fda2fb969953d01d5836fdcaca5102c6beaa98765454a411fe4b&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Not%2520isFallback.gif%22&x-id=GetObject" width="550px" height="500px" />
+>
+>   - _isFallback 을 이용한 Loader 화면 O_
+>     → 초기 로드 시, 로딩 화면 출력
+>       <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f4cc7aca-d156-42ad-93f4-f056e960127a/isFallback.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220320%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220320T063659Z&X-Amz-Expires=86400&X-Amz-Signature=bcd003825a9925abecf9b50243b4f52a712dd65de08bc49493f76bacb9ba5348&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22isFallback.gif%22&x-id=GetObject" width="550px" height="500px" />
+>
+>
+> ## getStaticpaths()
+>
+> - 동적 라우팅(Dynamic Routing) page를 정적 생성할 때 사용되는 함수이다.
+>
+>   ### Syntax
+>
+>   ```jsx
+>   export async function getStaticPaths() {
+>     return {
+>       paths: [
+>         { params: { ... } }
+>       ],
+>       fallback: true // false or 'blocking'
+>     };
+>   }
+>   ```
+>
+>   ### Usage
+>
+>   - 특정 라우팅 page url 에 대해서만 정적 생성을 할 때, 사용할 수 있지만, 실제 서비스에서는 paths params 을 고정적으로 설정하는 경우가 거의 없다. 왜냐하면, 각 고유 파라미터를 가진 페이지의 데이터가 삭제되었을 수도 있고, 다른 데이터 추가로 인해 파라미터 값이 달라질 수도 있기 때문이다.
+>   - 따라서, array 기반으로 paths 를 넘겨줄 경우에는 `map()` 메서드로 return 하여 넘겨주도록 한다.
+>
+>   - 아래 코드는 3개의 상품에 대한 각각 상세 page를 현재 기준 id 값을 paths 로 넘겨주어 정적 생성하는 코드이다.
+>
+>   ```jsx
+>   // 만약, 730번 상품이 실제로 삭제되었을 수도 있고, 앞에 새 상품이 추가되어 id 가 값이 변경될 수도 있다.
+>   export const getStaticPaths = async () => {
+>     return {
+>       paths: [
+>         { params: { id: '740' } },
+>         { params: { id: '730' } },
+>         { params: { id: '729' } },
+>       ],
+>       fallback: true,
+>     };
+>   };
+>   ```
+>
+>   - 따라서, **마케팅 페이지, 블로그 게시물, 제품 목록, 도움말, 문서** 등의 page일 경우 특정 id를 수동으로 보내주는게 아닌 API 의 [res.data](http://res.data) 를 array 형태로 paths 값으로 넘겨주도록 한다.
+>     ```jsx
+>     export const getStaticPaths = async () => {
+>       const apiUrl = process.env.apiUrl;
+>       const res = await axios.get(apiUrl);
+>       const data = res.data;
+>       return {
+>         paths: data.map((item) => ({ params: { id: item.id.toString() } })),
+>         fallback: true,
+>       };
+>     };
+>     ```
+>
+> ## API Routes 와 Cookie로 로그인 기능 구현
+>
+> - APi routes와 Cookie 로 로그인/로그아웃 기능을 구현하며 동작 원리를 알아보도록 한다.
+> - 이 내용은 단순 원리 이해에 대해서만 참고해야 하며, 실제로는 보안 상의 문제로 인해 쿠키로 로그인 구현하면 위험할 수 있으니 주의하도록 한다.
+>
+>   ### 개요
+>
+>   - 구현에 대한 전체적인 플로우는 아래와 같다.
+>
+>   ![image](https://user-images.githubusercontent.com/53039583/159151242-30933216-66b9-49db-a6ce-a9f85f84bf53.png)
+>
+>   ### **Process**
+>
+>   1. Admin 페이지 접근 시, isLogin API에 `req` 을 보낸 후 `res` 을 받아 로그인 여부에 따라 페이지를 연결한다..(`a_name` 쿠키 확인)
+>      - 로그인 상태일 경우 → admin 페이지로 연결
+>      - 로그인 상태가 아닐 경우 → login 페이지로 연결
+>   2. login 페이지에서 Login 버튼 클릭 시, POST req 을 api/login.js 에 보낸다. 그러면 `api/login.js` 에서 `a_name` 쿠키를 생성하여 `res`로 `login.js` 에 보낸다.
+>   3. 생성한 쿠키를 받은 `login.js` 는 `admin.js` 로 보내주어 로그인 여부를 다시 확인한다.
+>   4. Admin 페이지에서 로그아웃 버튼 클릭 시, `api/logout.js` 는 `req` 을 받은 후 쿠키를 삭제하고 res 를 Admin.js 로 전달한다.
+>   5. Admin 페이지는 `api/logout.js` 로부터 받은 `res` 값으로 조건로직을 통해 홈 화면(’/’) 으로 이동시킨다.
+>
+>   ### API
+>
+>   - pages/api/**isLogin**.js → 로그인 여부를 확인하는 api
+>   - pages/api/**login**.js → 로그인 하는 api
+>   - pages/api/**logout**.js → 로그아웃 하는 api
+>
+>   ### pages
+>
+>   - pages/**admin**.js → 관리자 페이지
+>   - pages/**login**.js → 로그인 페이지
+>
+>   ### 구현
+>
+>   1. 로그인 상태일 경우에만 접근 가능한 관리자 페이지(`admin.js`)을 생성한다.
+>   2. 로그인 페이지(`login.js`) 을 생성한다.
+>   3. 로그인 상태를 체크 후, 로그인이 안되어있으면 `router.push(’/login’)` 을 통해 로그인 페이지로 이동하도록 구현
+>   4. 로그인 여부를 체크하는 `api/isLogin.js` 을 생성한다. (\*동적 api 라우트 만드는 방법)
+>   5. admin.js 에서 `checkLogin()` 함수로 isLogin api를 호출하여, **로그인 여부에 따른 작업**을 처리한다.
+>
+>      ```jsx
+>      import axios from 'axios';
+>      import React, { useEffect, useState } from 'react';
+>      import { useRouter } from 'next/router';
+>      import { Button } from 'semantic-ui-react';
+>
+>      const Admin = () => {
+>        const router = useRouter();
+>        const checkLogin = () => {
+>          axios.get('/api/isLogin').then((res) => {
+>            if (res.status === 200 && res.data.name) {
+>              // 로그인
+>            } else {
+>              // 로그인 안됨
+>              router.push('/login'); // 로그인 페이지로 이동
+>            }
+>          });
+>        };
+>
+>        useEffect(() => {
+>          checkLogin();
+>        });
+>
+>        return (
+>          <>
+>            <div>Admin Page 입니다</div>
+>          </>
+>        );
+>      };
+>
+>      export default Admin;
+>      ```
+>
+>   6. `api/login.js` 을 생성한다.
+>
+>      - method === ‘POST’ 일 경우에만 작동하도록 한다(보안)
+>      - 쿠키를 생성하여, 처리한다.
+>        ```jsx
+>        export default (req, res) => {
+>          if (req.method === 'POST') {
+>            // POST 로만 동작함
+>            /*
+>              setHeader : 요청 헤더 생성
+>                - args
+>                  1."Set-Cookie" : 쿠키 생성
+>                  2. "a_name=Mike;Max-Age=3600;HttpOnly,Secure" : 쿠키 내용 (쿠키명;쿠키 유지시간; ?? ; ??)
+>            */
+>            res.setHeader(
+>              'Set-Cookie',
+>              'a_name=Mike;Max-Age=3600;HttpOnly,Secure'
+>            );
+>            res.statusCode = 200;
+>            res.json({ message: 'ok' });
+>          }
+>        };
+>        ```
+>
+>   7. api/isLogin.js 을 아래와 같이 작성한다.
+>
+>      - [res.data](http://res.data) 의 name 값을 요청 헤더 쿠키의 a_name 값으로 정의하여 보내준다.
+>
+>      ```jsx
+>      export default (req, res) => {
+>        res.statusCode = 200;
+>        res.json({ name: req.cookies.a_name });
+>      };
+>      ```
+>
+>   8. api/logout.js 을 아래와 같이 작성한다
+>
+>      - 쿠키 값의 `Max-Age` 을 **0** 으로 세팅할 경우, 쿠키가 즉시 소멸됨.
+>
+>      ```jsx
+>      export default (req, res) => {
+>        res.setHeader('Set-Cookie', 'a_name=Mike;Max-Age=0;HttpOnly,Secure'); // Max-Age = 0 이면, 쿠키 즉시 소멸
+>        res.statusCode = 200;
+>        res.json({ message: 'ok' });
+>      };
+>      ```
+>
+>   9. admin.js 에 로그아웃 버튼과 관련 로직을 추가한다.
+>
+>   ```jsx
+>   import axios from 'axios';
+>   import React, { useEffect, useState } from 'react';
+>   import { useRouter } from 'next/router';
+>   import { Button } from 'semantic-ui-react';
+>
+>   const Admin = () => {
+>     const router = useRouter();
+>   +  const [isLogin, setIsLogin] = useState(false);
+>     const checkLogin = () => {
+>       axios.get('/api/isLogin').then((res) => {
+>         if (res.status === 200 && res.data.name) {
+>           // 로그인
+>   +        setIsLogin(true);
+>         } else {
+>           // 로그인 안됨
+>           router.push('/login'); // 로그인 페이지로 이동
+>         }
+>       });
+>     };
+>
+>   +  const logout = () => {
+>   +    axios.get('/api/logout').then((res) => {
+>   +      if (res.status === 200) {
+>   +        router.push('/');
+>   +     }
+>   +   });
+>   +  };
+>
+>     useEffect(() => {
+>       checkLogin();
+>     });
+>
+>     return (
+>       <>
+>         <div>Admin Page 입니다</div>
+>   +     {isLogin && <Button onClick={logout}>Logout</Button>}
+>       </>
+>     );
+>   };
+>
+>   export default Admin;
+>   ```
 
 ---
 
@@ -909,9 +1207,11 @@ $yarn dev
 > ### **TypeError: Cannot read properties of undefined (reading 'protocol')**
 >
 > - 증상
+>
 >   - .env.development 환경변수 작성 후 변수 `API_URL` 을 `process.env.NEXT_PUBLIC_API_URL` 변수로 바꾼 후 발생
 >
 >     ![image](https://user-images.githubusercontent.com/53039583/159114064-27af9470-dbbf-4497-9c9a-dd76899e0a02.png)
+>
 > - 원인
 >   - 환경변수 적용 시, 서버를 재시작해주어야 한다.
 > - 솔루션
@@ -924,7 +1224,9 @@ $yarn dev
 > - 원인
 >   - `axios.get(URL)` 에서 URL 인자 값이 **undefined** 일 때, 발생한다.
 > - 솔루션
+>
 >   - next.config.js 에 `env: { BASE_URL: process.env.BASE_URL}` 옵션을 삽입하고 개발서버를 재시작 하였더니 해결되었다.
+>
 >   ```jsx
 >   // next.config.js
 >
