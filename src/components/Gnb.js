@@ -10,6 +10,8 @@ const Gnb = () => {
     activeItem = 'Home';
   } else if (router.pathname === '/about') {
     activeItem = 'about';
+  } else if (router.pathname === '/admin') {
+    activeItem = 'admin';
   }
 
   const goLink = (e, data) => {
@@ -17,6 +19,8 @@ const Gnb = () => {
       router.push('/');
     } else if (data.name === 'about') {
       router.push('/about');
+    } else if (data.name === 'admin') {
+      router.push('/admin');
     }
   };
 
@@ -26,6 +30,11 @@ const Gnb = () => {
       <Menu.Item
         name="about"
         active={activeItem === 'about'}
+        onClick={goLink}
+      />
+      <Menu.Item
+        name="admin"
+        active={activeItem === 'admin'}
         onClick={goLink}
       />
     </Menu>
