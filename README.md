@@ -686,11 +686,15 @@ $yarn dev
 >
 >         export default Error;
 >         ```
->
+
+>### `github pages` 에 Custom 404 Error page 을 적용하고 싶을 때?
+- 404.js 또는 404.jsx page 파일 이름으로 github pages 에 적용이 되지 않을 경우, 404 page 파일명을 404.js → `_error.js` 으로 변경한 후, deploy 해보도록 한다. ([참조 링크](https://nextjs.org/docs/advanced-features/custom-error-page#404-page) 의 ‘**Caveats’ 목차** 참고 )
+
+
 > ## 환경 변수
->
-> - 개발 서버와 프로덕션 서버에서 각각 다른 데이터가 표현되어야 할 때 환경변수를 설정해주어야 한다
-> - 환경 변수의 형식은 각 환경에 따라 조금씩 다르다.
+
+ - 개발 서버와 프로덕션 서버에서 각각 다른 데이터가 표현되어야 할 때 환경변수를 설정해주어야 한다
+ - 환경 변수의 형식은 각 환경에 따라 조금씩 다르다.
 >
 >   ```json
 >   // node js 환경에서 환경변수를 불러오는 형식
